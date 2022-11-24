@@ -5,6 +5,7 @@ struct node
     int data;
     struct node *next;
 };
+
 struct node *head;
 
 void beginsert();
@@ -15,6 +16,7 @@ void last_delete();
 void random_delete();
 void display();
 void search();
+
 void main()
 {
     int choice = 0;
@@ -260,4 +262,4 @@ void display()
             ptr = ptr->next;
         }
     }
-          }
+}
