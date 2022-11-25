@@ -4,17 +4,16 @@
 #include <process.h>
 #include <string.h>
 
-struct Node 
-{
+#define nameLimit 25
+#define phoneLimit 10
+
+struct node {
     char *name;
-    unsigned long long int phone;
-    //struct Node *next;
-    node *next;
+    char *phone;
+    struct node *link;
 };
 
-typedef struct Node node;
-node *head;
-
+struct node *head  = NULL;
 
 void createContact();
 void deleteContact();
@@ -23,7 +22,7 @@ void showAllContacts();
 
 int main(void)
 {   
-    int choice;
+    int option;
     do
     {
         printf("\n\n*********Main Menu*********\n");
@@ -32,8 +31,8 @@ int main(void)
         printf("\n0. Exit :(\n1. Create\n2. Delete\n3. Search\n4. Show All Contacts\n");
         printf("\nEnter your choice?\n");
 
-        scanf("\n%d", &choice);
-        switch (choice)
+        scanf("\n%d", &option);
+        switch (option)
         {
         case 0:
             exit(0);
@@ -53,7 +52,7 @@ int main(void)
         default:
             printf("Please enter valid choice..");
         }
-    }while(choice!=0);
+    }while(option!=0);
 
     return 0;
 }
@@ -61,27 +60,31 @@ int main(void)
 
 void createContact()
 {
-    node *ptr;
-    char name;
-    unsigned long long int phone;
-    ptr = (node*)malloc(sizeof(node*));
-    if (ptr == NULL)
+    struct node *nodePtr;
+    nodePtr = (struct node*)malloc(sizeof(struct node*));
+    char name[nameLimit], phone[phoneLimit];
+    if (nodePtr == NULL)
     {
         printf("\nOVERFLOW");
     }
     else
     {
-        printf("\nEnter Name\n");
-        gets(name);
-        printf("\nEnter Phone\n");
-        scanf("%llu", &phone);
-        ptr->name = name;
-        ptr->phone =phone;
-        ptr->next = head;
-        head = ptr;
+        printf("Enter Name: ");
+        fflush(stdin);
+        fgets(name, nameLimit, stdin);
+        fflush(stdin);
+        printf("Enter Phone: ");
+        fflush(stdin);
+        fgets(phone, phoneLimit, stdin);
+        fflush(stdin);
         printf("\nNode inserted");
     }
-    free(ptr);
+    nodePtr->name = name;
+    nodePtr->phone = phone;
+    nodePtr->link = head;
+    head = nodePtr;
+    // free(nodePtr);
+    // nodePtr = NULL;
 }
 
 void deleteContact()
@@ -91,10 +94,37 @@ void deleteContact()
 
 void searchContact()
 {
+    struct node *currentNodePtr;
+    currentNodePtr = head;
+    if(currentNodePtr = NULL)
+    {
+        printf("\nList is Empty !!");
+    }
+    else
+    {
 
+    }
 }
 
 void showAllContacts()
 {
-
+    struct node *currentNodePtr;
+    currentNodePtr = head;
+    if(currentNodePtr == NULL)
+    {
+        printf("No Contacts Found !!");
+    }
+    else
+    {
+        printf("Showing All Contacts...");
+        while(currentNodePtr != NULL)
+        {
+            //char phone[phoneLimit] = currentNodePtr->phone;
+            //char name[nameLimit] = currentNodePtr->name;
+            //printf("%s - %s",phone,name);
+            printf("%s - %s", currentNodePtr->phone, currentNodePtr->name);
+            currentNodePtr = currentNodePtr->link;
+        }
+    }
+    currentNodePtr = NULL;
 }
