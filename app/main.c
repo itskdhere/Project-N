@@ -71,16 +71,16 @@ void createContact()
     {
         printf("Enter Name: ");
         fflush(stdin);
-        fgets(name, nameLimit, stdin);
+        fgets(nodePtr->name, nameLimit, stdin);
         fflush(stdin);
         printf("Enter Phone: ");
         fflush(stdin);
-        fgets(phone, phoneLimit, stdin);
+        fgets(nodePtr->phone, phoneLimit, stdin);
         fflush(stdin);
         printf("\nNode inserted");
     }
-    nodePtr->name = name;
-    nodePtr->phone = phone;
+    // nodePtr->name = name;
+    // nodePtr->phone = phone;
     nodePtr->link = head;
     head = nodePtr;
     // free(nodePtr);
@@ -96,13 +96,9 @@ void searchContact()
 {
     struct node *currentNodePtr;
     currentNodePtr = head;
-    if(currentNodePtr = NULL)
+    if (currentNodePtr == NULL)
     {
         printf("\nList is Empty !!");
-    }
-    else
-    {
-
     }
 }
 
@@ -116,15 +112,17 @@ void showAllContacts()
     }
     else
     {
-        printf("Showing All Contacts...");
+        printf("Showing All Contacts...\n");
+        printf("Phone Number   Name\n");
         while(currentNodePtr != NULL)
         {
             //char phone[phoneLimit] = currentNodePtr->phone;
             //char name[nameLimit] = currentNodePtr->name;
             //printf("%s - %s",phone,name);
-            printf("%s - %s", currentNodePtr->phone, currentNodePtr->name);
+            //printf("%c - %c", ((char*)currentNodePtr->phone), ((char*)currentNodePtr->name));
+            puts(currentNodePtr->phone);
+            puts(currentNodePtr->name);
             currentNodePtr = currentNodePtr->link;
         }
     }
-    currentNodePtr = NULL;
 }
