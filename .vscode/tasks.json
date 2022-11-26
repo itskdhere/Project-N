@@ -3,11 +3,11 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "C/C++: gcc.exe build active file",
+			"label": "C:Build",
 			"command": "D:\\IDE\\Dev-Cpp\\TDM-GCC-64\\bin\\gcc.exe",
 			"args": [
 				"-fdiagnostics-color=always",
-				"-g",
+				"-g3",
 				"-Wall",
 				"${file}",
 				"-o",
@@ -28,7 +28,7 @@
 
 		{
 			"type": "shell",
-			"label": "Run & Debug C/C++ Program",
+			"label": "C:Build & Run",
 			"command": "D:\\IDE\\Dev-Cpp\\TDM-GCC-64\\bin\\gcc.exe -g \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" && \"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
 			"options": {
 				"cwd": "${fileDirname}"
