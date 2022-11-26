@@ -41,7 +41,7 @@ int main(void)
             exit(0);
             break;
         case 1:
-            createContactm();
+            createContact();
             break;
         case 2:
             deleteContact();
@@ -76,13 +76,10 @@ void createContactm()
         printf("Enter Name: ");
         fflush(stdin);
         gets(name);
-        //fgets(name, 25, stdin);
         fflush(stdin);
-
         printf("Enter Phone: ");
         fflush(stdin);
         gets(phone);
-        //fgets(phone, 11, stdin);
         fflush(stdin);
 
         strcpy(currentNodePtr->name, name);
@@ -110,40 +107,45 @@ void createContactm()
 
 void createContact()
 {
-    struct node *ptr, *temp;
-    char item[10];
-    char name[30];
-    ptr = (struct node *)malloc(sizeof(struct node));
-    if (ptr == NULL)
+    struct node *currentNodePtr, *tempNodePtr;
+    currentNodePtr = (struct node *)malloc(sizeof(struct node));
+    char name[25];
+    char phone[11];
+    if (currentNodePtr == NULL)
     {
-        printf("\nOVERFLOW");
+        printf("\nCan't Allocate Memory");
     }
     else
     {
         fflush(stdin);
-        printf("\nEnter Contact Number?\n");
-        gets(item);
+        printf("Enter Name: ");
         fflush(stdin);
-        printf("\nEnter Name?\n");
         gets(name);
-        strcpy(ptr->phone, item);
-        strcpy(ptr->name, name);
+        fflush(stdin);
+        printf("Enter Phone: ");
+        fflush(stdin);
+        gets(phone);
+        fflush(stdin);
+
+        strcpy(currentNodePtr->name, name);
+        strcpy(currentNodePtr->phone, phone);
+
         if (head == NULL)
         {
-            ptr->nextNodeLink = NULL;
-            head = ptr;
-            printf("\nNode inserted");
+            currentNodePtr->nextNodeLink = NULL;
+            head = currentNodePtr;
+            printf("\nContact Created Successfully");
         }
         else
         {
-            temp = head;
-            while (temp->nextNodeLink != NULL)
+            tempNodePtr = head;
+            while (tempNodePtr->nextNodeLink != NULL)
             {
-                temp = temp->nextNodeLink;
+                tempNodePtr = tempNodePtr->nextNodeLink;
             }
-            temp->nextNodeLink = ptr;
-            ptr->nextNodeLink = NULL;
-            printf("\nNode inserted");
+            tempNodePtr->nextNodeLink = currentNodePtr;
+            currentNodePtr->nextNodeLink = NULL;
+            printf("\nContact Created Successfully");
         }
     }
 }
