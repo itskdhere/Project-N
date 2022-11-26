@@ -17,7 +17,6 @@ struct node
 struct node *head;
 
 void createContact();
-void createContactm();
 void deleteContact();
 void searchContact();
 void showAllContacts();
@@ -58,51 +57,6 @@ int main(void)
     } while (option != 0);
 
     return 0;
-}
-
-void createContactm()
-{
-    struct node *currentNodePtr, *tempNodePtr;
-    currentNodePtr = (struct node *)malloc(sizeof(struct node *));
-    char name[25];
-    char phone[11];
-    if (currentNodePtr == NULL)
-    {
-        printf("\nCan't Allocate Memory");
-    }
-    else
-    {
-        fflush(stdin);
-        printf("Enter Name: ");
-        fflush(stdin);
-        gets(name);
-        fflush(stdin);
-        printf("Enter Phone: ");
-        fflush(stdin);
-        gets(phone);
-        fflush(stdin);
-
-        strcpy(currentNodePtr->name, name);
-        strcpy(currentNodePtr->phone, phone);
-
-        if (head == NULL)
-        {
-            currentNodePtr->nextNodeLink = NULL;
-            head = currentNodePtr;
-            printf("\nContact Created Successfully");
-        }
-        else
-        {
-            tempNodePtr = head;
-            while (tempNodePtr->nextNodeLink != NULL)
-            {
-                tempNodePtr = tempNodePtr->nextNodeLink;
-            }
-            tempNodePtr->nextNodeLink = currentNodePtr;
-            currentNodePtr->nextNodeLink = NULL;
-            printf("\nContact Created Successfully");
-        }
-    }
 }
 
 void createContact()
@@ -157,27 +111,50 @@ void deleteContact()
 
 void searchContact()
 {
-    printf("search lol");
-    // struct node *currentNodePtr;
-    // currentNodePtr = head;
-    // char search[25];
-    // if (currentNodePtr != NULL)
-    // {
-    //     printf("\nEnter Phone Number or Name to Search: ");
-    //     fgets(search, nameLimit, stdin);
-    //     fflush(stdin);
-    //     if (strlen(search) == phoneLimit + 1)
-    //     {
-    //         printf("Searching for Phone Number: %s", search);
-    //         while (currentNodePtr != NULL)
-    //         {
-    //         }
-    //     }
-    // }
-    // else
-    // {
-    //     printf("\nList is Empty !!");
-    // }
+    struct node *currentNodePtr;
+    currentNodePtr = head;
+    char search[25];
+    int contactFound = 1;
+    if (currentNodePtr != NULL)
+    {
+        printf("\nEnter Phone Number or Name to Search: ");
+        fgets(search, nameLimit, stdin);
+        fflush(stdin);
+        if (strlen(search) == phoneLimit)
+        {
+            printf("Searching for Phone Number: '%s'", search);
+            search[10] = '\000';
+            while (currentNodePtr != NULL)
+            {
+                printf("\nTest: '%s'\t'%s'", currentNodePtr->phone, currentNodePtr->name); //for debug
+                if (strcmp(currentNodePtr->phone, search) == 0)
+                {
+                    printf("\nContact Found: '%s'\t'%s'", currentNodePtr->phone, currentNodePtr->name);
+                    // printf("\n%s\t%s", currentNodePtr->phone, currentNodePtr->name);
+                    contactFound = 1;
+                }
+                else
+                {
+                    contactFound = 0;
+                }
+                currentNodePtr = currentNodePtr->nextNodeLink;
+            }
+            if (contactFound == 0)
+            {
+                printf("\nContact NOT Found");
+            }
+        }
+        else if (strlen(search) == nameLimit)
+        {
+            printf("currently name not supported");
+        }
+        else
+            printf("Error !");
+    }
+    else
+    {
+        printf("\nContact List is Empty !!");
+    }
 }
 
 void showAllContacts()
@@ -193,11 +170,6 @@ void showAllContacts()
         {
             printf("\n%s\t%s", currentNodePtr->phone, currentNodePtr->name);
             currentNodePtr = currentNodePtr->nextNodeLink;
-            // char phone[phoneLimit] = currentNodePtr->phone;
-            // char name[nameLimit] = currentNodePtr->name;
-            // printf("%s - %s",phone,name);
-            // puts(currentNodePtr->phone);
-            // puts(currentNodePtr->name);
         }
     }
     else
@@ -205,6 +177,53 @@ void showAllContacts()
         printf("\nNo Contacts Found !!");
     }
 }
+
+/*
+void createContactm()
+{
+    struct node *currentNodePtr, *tempNodePtr;
+    currentNodePtr = (struct node *)malloc(sizeof(struct node *));
+    char name[25];
+    char phone[11];
+    if (currentNodePtr == NULL)
+    {
+        printf("\nCan't Allocate Memory");
+    }
+    else
+    {
+        fflush(stdin);
+        printf("Enter Name: ");
+        fflush(stdin);
+        gets(name);
+        fflush(stdin);
+        printf("Enter Phone: ");
+        fflush(stdin);
+        gets(phone);
+        fflush(stdin);
+
+        strcpy(currentNodePtr->name, name);
+        strcpy(currentNodePtr->phone, phone);
+
+        if (head == NULL)
+        {
+            currentNodePtr->nextNodeLink = NULL;
+            head = currentNodePtr;
+            printf("\nContact Created Successfully");
+        }
+        else
+        {
+            tempNodePtr = head;
+            while (tempNodePtr->nextNodeLink != NULL)
+            {
+                tempNodePtr = tempNodePtr->nextNodeLink;
+            }
+            tempNodePtr->nextNodeLink = currentNodePtr;
+            currentNodePtr->nextNodeLink = NULL;
+            printf("\nContact Created Successfully");
+        }
+    }
+}
+*/
 
 /*
 void createContact()
