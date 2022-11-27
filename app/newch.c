@@ -68,7 +68,7 @@ void beginsert()
     struct node *ptr;  
     char item[10]; 
 	char name[30];
-    ptr = (struct node *) malloc(sizeof(struct node *));  
+    ptr = (struct node *) malloc(sizeof(struct node));
     if(ptr == NULL)  
     {  
         printf("\nOVERFLOW");  
