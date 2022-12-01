@@ -23,6 +23,7 @@ void showAllContacts();
 int main(int argc, char const *argv[])
 {
     int option;
+    printf("Welcome to PhoneBook !!");
     do
     {
         printf("\n\n\n------------Main Menu------------");
@@ -51,7 +52,7 @@ int main(int argc, char const *argv[])
             showAllContacts();
             break;
         default:
-            printf("Please Enter A Valid Choice..");
+            printf("\nPlease Enter A Valid Choice..");
         }
     } while (option != 0);
 
@@ -76,7 +77,7 @@ void createContact()
     printf("Enter Phone: ");
     fgets(phone, phoneLimit, stdin);
     fflush(stdin);
-
+    
     strcpy(currentNodePtr->name, name);
     strcpy(currentNodePtr->phone, phone);
 
@@ -97,6 +98,101 @@ void createContact()
         currentNodePtr->nextNodeLink = NULL;
         printf("\nContact Created Successfully");
     }
+}
+
+void searchContact()
+{
+    struct node *currentNodePtr;
+    currentNodePtr = head;
+    if (currentNodePtr == NULL)
+    {
+        printf("\nContact List is Empty !!");
+        return;
+    }
+
+    char searchInput[nameLimit];
+    printf("\nEnter Phone Number or Name to Search: ");
+    fgets(searchInput, nameLimit, stdin);
+    fflush(stdin);
+
+    char search[strlen(searchInput)];
+    strcpy(search, searchInput);
+    search[strlen(searchInput) - 1] = '\000';
+    int searchType; // 0=Number, 1=Name
+    int contactFound = 1;
+    char ch;
+    for (int i = 0; i < strlen(search); i++)
+    {
+        for (ch = 0x30; ch < 0x39; ch++)
+        {
+            if (search[i] == ch)
+            {
+                searchType = 0;
+                break;
+            }
+            else
+                searchType = 1;
+        }
+    }
+
+    if (searchType == 0)
+    {
+        printf("\nSearching for Phone Number: '%s'", search);
+        printf("\n------------------------");
+        printf("\n|   Number   |   Name   ");
+        printf("\n------------------------\n");
+        // search[strlen(search) - 1] = '\000';
+        while (currentNodePtr != NULL)
+        {
+            // printf("\nTest: '%s'\t'%s'", currentNodePtr->phone, currentNodePtr->name); // for debug
+            if (strncmp(currentNodePtr->phone, search, strlen(search)) == 0)
+            {
+                // printf("\nContact Found: ");
+                printf("| %s | %s", currentNodePtr->phone, currentNodePtr->name);
+                contactFound = 1;
+            }
+            else
+            {
+                contactFound = 0;
+            }
+            currentNodePtr = currentNodePtr->nextNodeLink;
+        }
+        printf("------------------------");
+        if (contactFound == 0)
+        {
+            printf("\nContact NOT Found");
+        }
+    }
+    else if (searchType == 1)
+    {
+        printf("\nSearching for Name: '%s'", search);
+        printf("\n------------------------");
+        printf("\n|   Number   |   Name   ");
+        printf("\n------------------------\n");
+        // search[strlen(search) - 1] = '\000';
+        while (currentNodePtr != NULL)
+        {
+            // printf("\nTest: '%s'\t'%s'", currentNodePtr->phone, currentNodePtr->name); // for debug
+            if (strncmp(currentNodePtr->name, search, strlen(search)) == 0)
+            {
+                // printf("\nContact Found: ");
+                printf("| %s | %s", currentNodePtr->phone, currentNodePtr->name);
+                contactFound = 1;
+            }
+            else
+            {
+                contactFound = 0;
+            }
+            currentNodePtr = currentNodePtr->nextNodeLink;
+        }
+        printf("------------------------");
+        if (contactFound == 0)
+        {
+            printf("\nContact NOT Found");
+        }
+    }
+    else
+        printf("Error !");
 }
 
 void deleteContact()
@@ -130,93 +226,6 @@ void deleteContact()
     }
 }
 
-void searchContact()
-{
-    struct node *currentNodePtr;
-    currentNodePtr = head;
-    if (currentNodePtr == NULL)
-    {
-        printf("\nContact List is Empty !!");
-        return;
-    }
-
-    char searchInput[nameLimit];
-    printf("\nEnter Phone Number or Name to Search: ");
-    fgets(searchInput, nameLimit, stdin);
-    fflush(stdin);
-
-    char search[strlen(searchInput)];
-    strcpy(search, searchInput);
-    search[strlen(searchInput) - 1] = '\000';
-    int searchType = 0; // 0=Number, 1=Name
-    int contactFound = 1;
-    char ch;
-    for (int i = 0; i < strlen(search); i++)
-    {
-        for (ch = 0x30; ch < 0x39; ch++)
-        {
-            if (search[i] == ch)
-            {
-                searchType = 0;
-                break;
-            }
-            else
-                searchType = 1;
-        }
-    }
-
-    if (searchType == 0)
-    {
-        printf("Searching for Phone Number: '%s'", search);
-        // search[strlen(search) - 1] = '\000';
-        while (currentNodePtr != NULL)
-        {
-            //printf("\nTest: '%s'\t'%s'", currentNodePtr->phone, currentNodePtr->name); // for debug
-            if (strncmp(currentNodePtr->phone, search, strlen(search)) == 0)
-            {
-                printf("\nContact Found: ");
-                printf("%s -- %s", currentNodePtr->phone, currentNodePtr->name);
-                contactFound = 1;
-            }
-            else
-            {
-                contactFound = 0;
-            }
-            currentNodePtr = currentNodePtr->nextNodeLink;
-        }
-        if (contactFound == 0)
-        {
-            printf("\nContact NOT Found");
-        }
-    }
-    else if (searchType == 1)
-    {
-        printf("Searching for Name: '%s'", search);
-        // search[strlen(search) - 1] = '\000';
-        while (currentNodePtr != NULL)
-        {
-            //printf("\nTest: '%s'\t'%s'", currentNodePtr->phone, currentNodePtr->name); // for debug
-            if (strncmp(currentNodePtr->name, search, strlen(search)) == 0)
-            {
-                printf("\nContact Found: ");
-                printf("%s -- %s", currentNodePtr->phone, currentNodePtr->name);
-                contactFound = 1;
-            }
-            else
-            {
-                contactFound = 0;
-            }
-            currentNodePtr = currentNodePtr->nextNodeLink;
-        }
-        if (contactFound == 0)
-        {
-            printf("\nContact NOT Found");
-        }
-    }
-    else
-        printf("Error !");
-}
-
 void showAllContacts()
 {
     struct node *currentNodePtr;
@@ -226,14 +235,14 @@ void showAllContacts()
     {
         printf("\nShowing All Contacts...\n");
         printf("------------------------");
-        printf("\n|   Number   |   Name   |");
-        printf("\n------------------------");
+        printf("\n|   Number   |   Name   ");
+        printf("\n------------------------\n");
         while (currentNodePtr != NULL)
         {
-            printf("\n| %s | %s", currentNodePtr->phone, currentNodePtr->name);
+            printf("| %s | %s", currentNodePtr->phone, currentNodePtr->name);
             currentNodePtr = currentNodePtr->nextNodeLink;
         }
-        printf("\n------------------------");
+        printf("------------------------");
     }
     else
     {

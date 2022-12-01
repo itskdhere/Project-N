@@ -7,31 +7,34 @@ head:
 	.space 8
 	.def	__main;	.scl	2;	.type	32;	.endef
 	.section .rdata,"dr"
-	.align 8
 .LC0:
-	.ascii "\12\12\12------------Main Menu------------\0"
+	.ascii "Welcome to PhoneBook !!\0"
 	.align 8
 .LC1:
-	.ascii "\12Choose one option from the following list..\0"
+	.ascii "\12\12\12------------Main Menu------------\0"
 	.align 8
 .LC2:
+	.ascii "\12Choose one option from the following list..\0"
+	.align 8
+.LC3:
 	.ascii "\12"
 	.ascii "0 = Exit :(\12"
 	.ascii "1 = Create New Contact\0"
 	.align 8
-.LC3:
+.LC4:
 	.ascii "\12"
 	.ascii "2 = Search A Contact\12"
 	.ascii "3 = Delete A Contact\0"
-.LC4:
+.LC5:
 	.ascii "\12"
 	.ascii "4 = Show All Contacts\0"
-.LC5:
-	.ascii "\12Enter your choice: \0"
 .LC6:
-	.ascii "%d\0"
+	.ascii "\12Enter your choice: \0"
 .LC7:
-	.ascii "Please Enter A Valid Choice..\0"
+	.ascii "%d\0"
+	.align 8
+.LC8:
+	.ascii "\12Please Enter A Valid Choice..\0"
 	.text
 	.globl	main
 	.def	main;	.scl	2;	.type	32;	.endef
@@ -47,9 +50,9 @@ main:
 	movl	%ecx, 16(%rbp)
 	movq	%rdx, 24(%rbp)
 	call	__main
-.L10:
 	leaq	.LC0(%rip), %rcx
 	call	printf
+.L10:
 	leaq	.LC1(%rip), %rcx
 	call	printf
 	leaq	.LC2(%rip), %rcx
@@ -57,12 +60,14 @@ main:
 	leaq	.LC3(%rip), %rcx
 	call	printf
 	leaq	.LC4(%rip), %rcx
-	call	puts
+	call	printf
 	leaq	.LC5(%rip), %rcx
+	call	puts
+	leaq	.LC6(%rip), %rcx
 	call	printf
 	leaq	-4(%rbp), %rax
 	movq	%rax, %rdx
-	leaq	.LC6(%rip), %rcx
+	leaq	.LC7(%rip), %rcx
 	call	scanf
 	movl	$0, %ecx
 	movq	__imp___acrt_iob_func(%rip), %rax
@@ -105,7 +110,7 @@ main:
 	call	showAllContacts
 	jmp	.L9
 .L2:
-	leaq	.LC7(%rip), %rcx
+	leaq	.LC8(%rip), %rcx
 	call	printf
 .L9:
 	movl	-4(%rbp), %eax
@@ -117,13 +122,13 @@ main:
 	ret
 	.seh_endproc
 	.section .rdata,"dr"
-.LC8:
-	.ascii "\12Can't Allocate Memory\0"
 .LC9:
-	.ascii "Enter Name: \0"
+	.ascii "\12Can't Allocate Memory\0"
 .LC10:
-	.ascii "Enter Phone: \0"
+	.ascii "Enter Name: \0"
 .LC11:
+	.ascii "Enter Phone: \0"
+.LC12:
 	.ascii "\12Contact Created Successfully\0"
 	.text
 	.globl	createContact
@@ -142,7 +147,7 @@ createContact:
 	movq	%rax, -16(%rbp)
 	cmpq	$0, -16(%rbp)
 	jne	.L13
-	leaq	.LC8(%rip), %rcx
+	leaq	.LC9(%rip), %rcx
 	call	printf
 	jmp	.L12
 .L13:
@@ -151,7 +156,7 @@ createContact:
 	call	*%rax
 	movq	%rax, %rcx
 	call	fflush
-	leaq	.LC9(%rip), %rcx
+	leaq	.LC10(%rip), %rcx
 	call	printf
 	movl	$0, %ecx
 	movq	__imp___acrt_iob_func(%rip), %rax
@@ -167,7 +172,7 @@ createContact:
 	call	*%rax
 	movq	%rax, %rcx
 	call	fflush
-	leaq	.LC10(%rip), %rcx
+	leaq	.LC11(%rip), %rcx
 	call	printf
 	movl	$0, %ecx
 	movq	__imp___acrt_iob_func(%rip), %rax
@@ -199,7 +204,7 @@ createContact:
 	movq	$0, 40(%rax)
 	movq	-16(%rbp), %rax
 	movq	%rax, head(%rip)
-	leaq	.LC11(%rip), %rcx
+	leaq	.LC12(%rip), %rcx
 	call	printf
 	jmp	.L12
 .L15:
@@ -220,7 +225,7 @@ createContact:
 	movq	%rdx, 40(%rax)
 	movq	-16(%rbp), %rax
 	movq	$0, 40(%rax)
-	leaq	.LC11(%rip), %rcx
+	leaq	.LC12(%rip), %rcx
 	call	printf
 	nop
 .L12:
@@ -229,114 +234,27 @@ createContact:
 	ret
 	.seh_endproc
 	.section .rdata,"dr"
-.LC12:
+.LC13:
 	.ascii "\12Contact List is Empty !!\0"
 	.align 8
-.LC13:
-	.ascii "\12Enter Phone Number to Delete: \0"
 .LC14:
-	.ascii "Contact Deleted: %s\11%s\0"
-	.text
-	.globl	deleteContact
-	.def	deleteContact;	.scl	2;	.type	32;	.endef
-	.seh_proc	deleteContact
-deleteContact:
-	pushq	%rbp
-	.seh_pushreg	%rbp
-	movq	%rsp, %rbp
-	.seh_setframe	%rbp, 0
-	subq	$64, %rsp
-	.seh_stackalloc	64
-	.seh_endprologue
-	movq	head(%rip), %rax
-	movq	%rax, -16(%rbp)
-	cmpq	$0, -16(%rbp)
-	jne	.L20
-	leaq	.LC12(%rip), %rcx
-	call	printf
-	jmp	.L19
-.L20:
-	leaq	.LC13(%rip), %rcx
-	call	printf
-	movl	$0, %ecx
-	movq	__imp___acrt_iob_func(%rip), %rax
-	call	*%rax
-	movq	%rax, %rdx
-	leaq	-27(%rbp), %rax
-	movq	%rdx, %r8
-	movl	$11, %edx
-	movq	%rax, %rcx
-	call	fgets
-	movl	$0, %ecx
-	movq	__imp___acrt_iob_func(%rip), %rax
-	call	*%rax
-	movq	%rax, %rcx
-	call	fflush
-	leaq	-27(%rbp), %rax
-	movq	%rax, %rcx
-	call	strlen
-	subq	$1, %rax
-	movb	$0, -27(%rbp,%rax)
-	jmp	.L22
-.L25:
-	leaq	-27(%rbp), %rax
-	movq	%rax, %rcx
-	call	strlen
-	movq	%rax, %rdx
-	movq	-16(%rbp), %rax
-	leaq	25(%rax), %rcx
-	leaq	-27(%rbp), %rax
-	movq	%rdx, %r8
-	movq	%rax, %rdx
-	call	strncmp
-	testl	%eax, %eax
-	jne	.L23
-	movq	-16(%rbp), %rdx
-	movq	-16(%rbp), %rax
-	addq	$25, %rax
-	movq	%rdx, %r8
-	movq	%rax, %rdx
-	leaq	.LC14(%rip), %rcx
-	call	printf
-	movq	-16(%rbp), %rax
-	movq	40(%rax), %rdx
-	movq	-8(%rbp), %rax
-	movq	%rdx, 40(%rax)
-	movq	-16(%rbp), %rax
-	movq	%rax, %rcx
-	call	free
-	movq	$0, -16(%rbp)
-	jmp	.L19
-.L23:
-	movq	-16(%rbp), %rax
-	movq	%rax, -8(%rbp)
-	movq	-16(%rbp), %rax
-	movq	40(%rax), %rax
-	movq	%rax, -16(%rbp)
-.L22:
-	cmpq	$0, -16(%rbp)
-	jne	.L25
-.L19:
-	addq	$64, %rsp
-	popq	%rbp
-	ret
-	.seh_endproc
-	.section .rdata,"dr"
-	.align 8
-.LC15:
 	.ascii "\12Enter Phone Number or Name to Search: \0"
 	.align 8
+.LC15:
+	.ascii "\12Searching for Phone Number: '%s'\0"
 .LC16:
-	.ascii "Searching for Phone Number: '%s'\0"
+	.ascii "\12------------------------\0"
 .LC17:
-	.ascii "\12Contact Found: \0"
+	.ascii "\12|   Number   |   Name   \0"
 .LC18:
-	.ascii "%s -- %s\0"
+	.ascii "| %s | %s\0"
 .LC19:
-	.ascii "\12Contact NOT Found\0"
+	.ascii "------------------------\0"
 .LC20:
-	.ascii "Searching for Name: '%s'\0"
+	.ascii "\12Contact NOT Found\0"
 .LC21:
+	.ascii "\12Searching for Name: '%s'\0"
+.LC22:
 	.ascii "Error !\0"
 	.text
 	.globl	searchContact
@@ -367,13 +285,13 @@ searchContact:
 	movq	head(%rip), %rax
 	movq	%rax, -16(%rbp)
 	cmpq	$0, -16(%rbp)
-	jne	.L27
-	leaq	.LC12(%rip), %rcx
+	jne	.L20
+	leaq	.LC13(%rip), %rcx
 	call	printf
 	movq	%rsi, %rsp
-	jmp	.L26
-.L27:
-	leaq	.LC15(%rip), %rcx
+	jmp	.L19
+.L20:
+	leaq	.LC14(%rip), %rcx
 	call	printf
 	movl	$0, %ecx
 	movq	__imp___acrt_iob_func(%rip), %rax
@@ -417,48 +335,53 @@ searchContact:
 	leaq	-1(%rax), %rdx
 	movq	-48(%rbp), %rax
 	movb	$0, (%rax,%rdx)
-	movl	$0, -4(%rbp)
 	movl	$1, -20(%rbp)
 	movl	$0, -28(%rbp)
-	jmp	.L29
-.L34:
+	jmp	.L22
+.L27:
 	movb	$48, -21(%rbp)
-	jmp	.L30
-.L33:
+	jmp	.L23
+.L26:
 	movq	-48(%rbp), %rdx
 	movl	-28(%rbp), %eax
 	cltq
 	movzbl	(%rdx,%rax), %eax
 	cmpb	%al, -21(%rbp)
-	jne	.L31
+	jne	.L24
 	movl	$0, -4(%rbp)
-	jmp	.L32
-.L31:
+	jmp	.L25
+.L24:
 	movl	$1, -4(%rbp)
 	movzbl	-21(%rbp), %eax
 	addl	$1, %eax
 	movb	%al, -21(%rbp)
-.L30:
+.L23:
 	cmpb	$56, -21(%rbp)
-	jle	.L33
-.L32:
+	jle	.L26
+.L25:
 	addl	$1, -28(%rbp)
-.L29:
+.L22:
 	movl	-28(%rbp), %eax
 	movslq	%eax, %rbx
 	movq	-48(%rbp), %rax
 	movq	%rax, %rcx
 	call	strlen
 	cmpq	%rax, %rbx
-	jb	.L34
+	jb	.L27
 	cmpl	$0, -4(%rbp)
-	jne	.L35
+	jne	.L28
 	movq	-48(%rbp), %rax
 	movq	%rax, %rdx
+	leaq	.LC15(%rip), %rcx
+	call	printf
 	leaq	.LC16(%rip), %rcx
 	call	printf
-	jmp	.L36
-.L39:
+	leaq	.LC17(%rip), %rcx
+	call	printf
+	leaq	.LC16(%rip), %rcx
+	call	puts
+	jmp	.L29
+.L32:
 	movq	-48(%rbp), %rax
 	movq	%rax, %rcx
 	call	strlen
@@ -470,9 +393,7 @@ searchContact:
 	movq	%rax, %rdx
 	call	strncmp
 	testl	%eax, %eax
-	jne	.L37
-	leaq	.LC17(%rip), %rcx
-	call	printf
+	jne	.L30
 	movq	-16(%rbp), %rdx
 	movq	-16(%rbp), %rax
 	addq	$25, %rax
@@ -481,30 +402,38 @@ searchContact:
 	leaq	.LC18(%rip), %rcx
 	call	printf
 	movl	$1, -20(%rbp)
-	jmp	.L38
-.L37:
+	jmp	.L31
+.L30:
 	movl	$0, -20(%rbp)
-.L38:
+.L31:
 	movq	-16(%rbp), %rax
 	movq	40(%rax), %rax
 	movq	%rax, -16(%rbp)
-.L36:
+.L29:
 	cmpq	$0, -16(%rbp)
-	jne	.L39
-	cmpl	$0, -20(%rbp)
-	jne	.L40
+	jne	.L32
 	leaq	.LC19(%rip), %rcx
 	call	printf
-	jmp	.L40
-.L35:
-	cmpl	$1, -4(%rbp)
-	jne	.L41
-	movq	-48(%rbp), %rax
-	movq	%rax, %rdx
+	cmpl	$0, -20(%rbp)
+	jne	.L33
 	leaq	.LC20(%rip), %rcx
 	call	printf
-	jmp	.L42
-.L45:
+	jmp	.L33
+.L28:
+	cmpl	$1, -4(%rbp)
+	jne	.L34
+	movq	-48(%rbp), %rax
+	movq	%rax, %rdx
+	leaq	.LC21(%rip), %rcx
+	call	printf
+	leaq	.LC16(%rip), %rcx
+	call	printf
+	leaq	.LC17(%rip), %rcx
+	call	printf
+	leaq	.LC16(%rip), %rcx
+	call	puts
+	jmp	.L35
+.L38:
 	movq	-48(%rbp), %rax
 	movq	%rax, %rcx
 	call	strlen
@@ -515,9 +444,7 @@ searchContact:
 	movq	%rax, %rcx
 	call	strncmp
 	testl	%eax, %eax
-	jne	.L43
-	leaq	.LC17(%rip), %rcx
-	call	printf
+	jne	.L36
 	movq	-16(%rbp), %rdx
 	movq	-16(%rbp), %rax
 	addq	$25, %rax
@@ -526,27 +453,29 @@ searchContact:
 	leaq	.LC18(%rip), %rcx
 	call	printf
 	movl	$1, -20(%rbp)
-	jmp	.L44
-.L43:
+	jmp	.L37
+.L36:
 	movl	$0, -20(%rbp)
-.L44:
+.L37:
 	movq	-16(%rbp), %rax
 	movq	40(%rax), %rax
 	movq	%rax, -16(%rbp)
-.L42:
+.L35:
 	cmpq	$0, -16(%rbp)
-	jne	.L45
-	cmpl	$0, -20(%rbp)
-	jne	.L40
+	jne	.L38
 	leaq	.LC19(%rip), %rcx
 	call	printf
-	jmp	.L40
-.L41:
-	leaq	.LC21(%rip), %rcx
+	cmpl	$0, -20(%rbp)
+	jne	.L33
+	leaq	.LC20(%rip), %rcx
 	call	printf
-.L40:
+	jmp	.L33
+.L34:
+	leaq	.LC22(%rip), %rcx
+	call	printf
+.L33:
 	movq	%rsi, %rsp
-.L26:
+.L19:
 	movq	%rbp, %rsp
 	popq	%rbx
 	popq	%rsi
@@ -558,17 +487,100 @@ searchContact:
 	ret
 	.seh_endproc
 	.section .rdata,"dr"
-.LC22:
-	.ascii "\12Showing All Contacts...\0"
+	.align 8
 .LC23:
-	.ascii "------------------------\0"
+	.ascii "\12Enter Phone Number to Delete: \0"
 .LC24:
-	.ascii "\12|   Number   |   Name   |\0"
+	.ascii "Contact Deleted: %s\11%s\0"
+	.text
+	.globl	deleteContact
+	.def	deleteContact;	.scl	2;	.type	32;	.endef
+	.seh_proc	deleteContact
+deleteContact:
+	pushq	%rbp
+	.seh_pushreg	%rbp
+	movq	%rsp, %rbp
+	.seh_setframe	%rbp, 0
+	subq	$64, %rsp
+	.seh_stackalloc	64
+	.seh_endprologue
+	movq	head(%rip), %rax
+	movq	%rax, -16(%rbp)
+	cmpq	$0, -16(%rbp)
+	jne	.L40
+	leaq	.LC13(%rip), %rcx
+	call	printf
+	jmp	.L39
+.L40:
+	leaq	.LC23(%rip), %rcx
+	call	printf
+	movl	$0, %ecx
+	movq	__imp___acrt_iob_func(%rip), %rax
+	call	*%rax
+	movq	%rax, %rdx
+	leaq	-27(%rbp), %rax
+	movq	%rdx, %r8
+	movl	$11, %edx
+	movq	%rax, %rcx
+	call	fgets
+	movl	$0, %ecx
+	movq	__imp___acrt_iob_func(%rip), %rax
+	call	*%rax
+	movq	%rax, %rcx
+	call	fflush
+	leaq	-27(%rbp), %rax
+	movq	%rax, %rcx
+	call	strlen
+	subq	$1, %rax
+	movb	$0, -27(%rbp,%rax)
+	jmp	.L42
+.L45:
+	leaq	-27(%rbp), %rax
+	movq	%rax, %rcx
+	call	strlen
+	movq	%rax, %rdx
+	movq	-16(%rbp), %rax
+	leaq	25(%rax), %rcx
+	leaq	-27(%rbp), %rax
+	movq	%rdx, %r8
+	movq	%rax, %rdx
+	call	strncmp
+	testl	%eax, %eax
+	jne	.L43
+	movq	-16(%rbp), %rdx
+	movq	-16(%rbp), %rax
+	addq	$25, %rax
+	movq	%rdx, %r8
+	movq	%rax, %rdx
+	leaq	.LC24(%rip), %rcx
+	call	printf
+	movq	-16(%rbp), %rax
+	movq	40(%rax), %rdx
+	movq	-8(%rbp), %rax
+	movq	%rdx, 40(%rax)
+	movq	-16(%rbp), %rax
+	movq	%rax, %rcx
+	call	free
+	movq	$0, -16(%rbp)
+	jmp	.L39
+.L43:
+	movq	-16(%rbp), %rax
+	movq	%rax, -8(%rbp)
+	movq	-16(%rbp), %rax
+	movq	40(%rax), %rax
+	movq	%rax, -16(%rbp)
+.L42:
+	cmpq	$0, -16(%rbp)
+	jne	.L45
+.L39:
+	addq	$64, %rsp
+	popq	%rbp
+	ret
+	.seh_endproc
+	.section .rdata,"dr"
 .LC25:
-	.ascii "\12------------------------\0"
+	.ascii "\12Showing All Contacts...\0"
 .LC26:
-	.ascii "\12| %s | %s\0"
-.LC27:
 	.ascii "\12No Contacts Found !!\0"
 	.text
 	.globl	showAllContacts
@@ -586,14 +598,14 @@ showAllContacts:
 	movq	%rax, -8(%rbp)
 	cmpq	$0, -8(%rbp)
 	je	.L47
-	leaq	.LC22(%rip), %rcx
-	call	puts
-	leaq	.LC23(%rip), %rcx
-	call	printf
-	leaq	.LC24(%rip), %rcx
-	call	printf
 	leaq	.LC25(%rip), %rcx
+	call	puts
+	leaq	.LC19(%rip), %rcx
 	call	printf
+	leaq	.LC17(%rip), %rcx
+	call	printf
+	leaq	.LC16(%rip), %rcx
+	call	puts
 	jmp	.L48
 .L49:
 	movq	-8(%rbp), %rdx
@@ -601,7 +613,7 @@ showAllContacts:
 	addq	$25, %rax
 	movq	%rdx, %r8
 	movq	%rax, %rdx
-	leaq	.LC26(%rip), %rcx
+	leaq	.LC18(%rip), %rcx
 	call	printf
 	movq	-8(%rbp), %rax
 	movq	40(%rax), %rax
@@ -609,11 +621,11 @@ showAllContacts:
 .L48:
 	cmpq	$0, -8(%rbp)
 	jne	.L49
-	leaq	.LC25(%rip), %rcx
+	leaq	.LC19(%rip), %rcx
 	call	printf
 	jmp	.L51
 .L47:
-	leaq	.LC27(%rip), %rcx
+	leaq	.LC26(%rip), %rcx
 	call	printf
 .L51:
 	nop
