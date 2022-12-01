@@ -1,15 +1,35 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RickRoll</title>
+    <style>
+        .video {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+    </style>
 </head>
 
-<body bgcolor="Gray">
+<body bgcolor="black">
     <br><br><br>
-    <div align="center">
-        <video width="640" height="360" autoplay controls muted>
+    <div id="loader">
+        <h1>Loading.. Please Wait..</h1>
+    </div>
+    <div class="video">
+        <video width="720" autoplay muted>
             <source src="https://kd-image-api.pages.dev/fun/rickroll.mp4" type="video/mp4">
-            <!-- <source src="rickroll.ogg" type="video/ogg"> -->
+            Error !!
         </video>
     </div>
     <!-- <audio controls autoplay>
@@ -18,6 +38,17 @@
         <source src="rickroll.wav" type="audio/wav">
         lol
     </audio> -->
-</body>
+    <script>
+        document.onreadystatechange = function () {
+            if (document.readyState !== "complete") {
+                document.querySelector("body").style.visibility = "hidden";
+                document.querySelector("#loader").style.visibility = "visible";
+            } else {
+                document.querySelector("#loader").style.display = "none";
+                document.querySelector("body").style.visibility = "visible";
+            }
+        };
 
+    </script>
+</body>
 </html>
