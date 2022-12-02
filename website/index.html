@@ -5,22 +5,51 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Project-N</title>
+    <style>
+        .video {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+    </style>
 </head>
 
 <body bgcolor="black">
-    <div align="center">
-        <h1>
-            Loading..
-        </h1>
+    <br><br><br>
+
+    <div id="loader">
+        <h1>Loading..</h1>
     </div>
-    <script defer>
-        function redirectpage() {
+
+    <div class="video">
+        <video width="720" autoplay muted controls>
+            <source src="https://kd-image-api.pages.dev/fun/rickroll.mp4" type="video/mp4">
+            Error !!
+        </video>
+    </div>
+
+    <script>
+        document.onreadystatechange = function () {
+            if (document.readyState !== "complete") {
+                document.querySelector("body").style.visibility = "hidden";
+                document.querySelector("#loader").style.visibility = "visible";
+            } else {
+                document.querySelector("#loader").style.display = "none";
+                document.querySelector("body").style.visibility = "visible";
+            }
+        };
+        /* function redirectpage() {
             window.location = "home.html";
         }
-        setTimeout("redirectpage()", 1000);
-
+        setTimeout("redirectpage()", 1000); */
     </script>
 </body>
 
